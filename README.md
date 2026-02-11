@@ -49,11 +49,13 @@ QA_automation/
 🚀 Kurulum ve Çalıştırma
 
 git clone https://github.com/Dogukan686/QA_automation.git
+
 cd QA_automation
 
 2. Sanal Ortamı Kurun ve Aktif Edin
 
 python -m venv venv
+
 venv\Scripts\activate  # Windows
 
 3. Bağımlılıkları Yükleyin
@@ -67,5 +69,6 @@ python -m pytest tests/test_insider_qa.py --alluredir=allure-results
 5. Raporu Oluşturun ve Açın
 
 allure generate allure-results --clean -o allure-report
+
 allure open allure-report
 
