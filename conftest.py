@@ -5,13 +5,14 @@ from selenium.webdriver.chrome.options import Options
 @pytest.fixture(scope="function")
 def driver():
     options = Options()
-    # GitHub Actions için zorunlu ayarlar
-    options.add_argument("--headless=new") 
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--window-size=1920,1080")
-    
+    options.add_argument("--start-maximized")
+    options.add_argument("--disable-notifications")
+    options.add_argument("--disable-popup-blocking")
+    # options.add_argument("--headless=new") # Debug için kapalı tutuyoruz
+
     driver = webdriver.Chrome(options=options)
-    driver.maximize_window()
+    driver.implicitly_wait(10)
+    
     yield driver
+    
     driver.quit()

@@ -1,18 +1,7 @@
-# Python & Sanal Ortam
 venv/
 __pycache__/
 *.pyc
-
-# Test Araçları & Cache
 .pytest_cache/
-geckodriver.log
-chromedriver.log
-
-# IDE Ayarları (PyCharm & VS Code)
-.idea/
-.vscode/
-
-# Allure
-allure-results/     # Ham veriler GitHub'a gitmesin (Gereksiz kalabalık)
-
-# allure-report/    # Başına # koyduk (veya silebilirsin), böylece raporun GitHub'a YÜKLENMESİNİ sağlıyoruz.
+allure-results/
+.env
+*.png
