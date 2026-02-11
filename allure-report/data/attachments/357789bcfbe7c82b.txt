@@ -1,0 +1,23 @@
+!!! Lokasyon seçimi başarısız: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff754a4f3d5
+	0x7ff754a4f430
+	0x7ff7547f10bd
+	0x7ff75484c2fe
+	0x7ff75484c60c
+	0x7ff75489d187
+	0x7ff754899d08
+	0x7ff75483cb0c
+	0x7ff75483da53
+	0x7ff754d2b470
+	0x7ff754d2586d
+	0x7ff754d4621a
+	0x7ff754a6b235
+	0x7ff754a73a5c
+	0x7ff754a58844
+	0x7ff754a589f6
+	0x7ff754a3eb87
+	0x7ffe3a7553e0
+	0x7ffe3b46485b
+

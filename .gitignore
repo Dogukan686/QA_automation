@@ -1,0 +1,17 @@
+# Python & Sanal Ortam
+venv/
+__pycache__/
+*.pyc
+
+# Test Araçları & Cache
+.pytest_cache/
+geckodriver.log
+chromedriver.log
+
+# IDE Ayarları (PyCharm & VS Code)
+.idea/
+.vscode/
+
+# Allure
+allure-results/     # Ham verileri gizliyoruz (Gereksiz kalabalık)
+# allure-report/    # Buranın başındaki # işaretini kaldırarak raporun yüklenmesini sağlıyoruz
