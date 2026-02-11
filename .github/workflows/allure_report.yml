@@ -14,7 +14,7 @@ jobs:
       - name: Install
         run: pip install -r requirements.txt
       - name: Test
-        run: python -m pytest tests/test_insider_qa.py --alluredir=allure-results
+        run: python -m pytest tests/test_insider_flow.py --alluredir=allure-results
         continue-on-error: true
       - name: Report
         uses: simple-elf/allure-report-action@master
