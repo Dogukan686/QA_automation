@@ -48,6 +48,8 @@ QA_automation/
 
 🚀 Kurulum ve Çalıştırma
 
+1. Projeyi Klonlayın
+
 git clone https://github.com/Dogukan686/QA_automation.git
 
 cd QA_automation
