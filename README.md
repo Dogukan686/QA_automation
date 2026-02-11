@@ -1,87 +1,61 @@
-# 🚀QA Test Otomasyon Projesi
+Bu proje, Insider kariyer sayfasındaki Quality Assurance ilanlarını otomatik olarak filtreleyen, doğrulayan ve sonuçları profesyonel bir raporlama sistemiyle sunan bir Selenium Webdriver otomasyon projesidir.
 
-Bu proje, Insider web sitesinin kariyer sayfasındaki Quality Assurance (QA) iş ilanlarını filtrelemek ve doğrulamak amacıyla hazırlanmıştır. 
+🛠 Kullanılan Teknolojiler
+Dil: Python 3.12+
 
-Proje, **Python**, **Selenium WebDriver** ve **Pytest** kullanılarak **Page Object Model (POM)** tasarım desenine uygun şekilde geliştirilmiştir.
+Test Framework: Pytest
 
----
+Web Otomasyon: Selenium WebDriver
 
-## 🛠 Kullanılan Teknolojiler
+Raporlama: Allure Report
 
-* **Dil:** Python 3.12+
-* **Test Framework:** Pytest
-* **Tarayıcı Otomasyonu:** Selenium WebDriver
-* **Tasarım Deseni:** Page Object Model (POM) - *Kodun okunabilirliğini ve bakımını kolaylaştırmak için.*
-* **Raporlama:** Pytest standart çıktıları
+Tasarım Deseni: Page Object Model (POM)
 
----
+Sürüm Kontrol: Git & GitHub
 
-## 📂 Proje Yapısı
+✨ Öne Çıkan Özellikler
+POM Mimarisi: Kodun sürdürülebilirliği ve okunabilirliği için Page Object Model yapısı kullanılmıştır.
 
-Dosyalar, sürdürülebilirliği sağlamak amacıyla modüler bir yapıda organize edilmiştir:
+Dinamik Filtreleme: Insider sitesindeki karmaşık Select2 dropdown yapıları, JavaScript Executor ve Explicit Wait kombinasyonu ile stabilize edilmiştir.
 
-```text
+Hata Anı Ekran Görüntüsü (Screenshot on Failure): Test fail ettiğinde, conftest.py içerisindeki hook sayesinde otomatik olarak o anın ekran görüntüsünü alıp Allure raporuna ekler.
+
+Esnek Locator Stratejisi: Lokasyon ve departman isimlerindeki karakter farklarını (Turkey/Turkiye) tolore eden esnek XPath'ler kullanılmıştır.
+
+📁 Proje Yapısı
+
 QA_automation/
-│
-├── pages/                  # Sayfa Elementleri ve Metodları (POM)
-│   ├── __init__.py
-│   ├── base_page.py        # Tüm sayfalar için ortak metodlar (Click, Find vb.)
-│   ├── home_page.py        # Ana sayfa işlemleri
-│   └── qa_page.py          # QA kariyer sayfası ve filtreleme işlemleri
-│
+├── pages/                  # Sayfa Nesneleri (POM)
+│   ├── base_page.py        # Temel metodlar (wait, click, find)
+│   └── qa_page.py          # QA sayfasına özel elementler ve aksiyonlar
 ├── tests/                  # Test Senaryoları
-│   ├── __init__.py
-│   └── test_insider_qa.py  # Ana test dosyamız
-│
-├── conftest.py             # WebDriver ayarları (Fixture)
+│   └── test_insider_qa.py  # Ana test akışı
+├── allure-results/         # Test sonrası oluşan ham veriler (Git'e gönderilmez)
+├── allure-report/          # Görselleştirilmiş HTML raporu
+├── conftest.py             # Pytest fixture'ları ve Allure screenshot hook'u
 ├── requirements.txt        # Gerekli kütüphaneler listesi
-└── README.md               # Proje dokümantasyonu
+└── .gitignore              # Takip edilmeyecek dosyalar (venv, pycache vb.)
 
-⚙️ Kurulum (Adım Adım)
-Projeyi kendi bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyebilirsiniz.
+🚀 Kurulum ve Çalıştırma
 
-1. Projeyi İndirin
-Projeyi bilgisayarınıza klonlayın veya zip olarak indirip bir klasöre çıkarın.
+git clone https://github.com/Dogukan686/QA_automation.git
+cd QA_automation
 
-2. Sanal Ortamı (Virtual Environment) Kurun
-Terminali proje klasöründe açın ve şu komutları sırasıyla uygulayın:
+2. Sanal Ortamı Kurun ve Aktif Edin
 
-Windows için:
 python -m venv venv
-venv\Scripts\activate
+venv\Scripts\activate  # Windows
 
-Mac/Linux için:
-python3 -m venv venv
-source venv/bin/activate
+3. Bağımlılıkları Yükleyin
 
-3. Gerekli Kütüphaneleri Yükleyin
 pip install -r requirements.txt
 
-▶️ Testi Çalıştırma
-Kurulum tamamlandıktan sonra testi başlatmak için terminale şu komutu yazın:
-python -m pytest tests/test_insider_qa.py
-Daha detaylı çıktı görmek isterseniz: python -m pytest -v tests/test_insider_qa.py
+4. Testleri Koşturun
 
-✅ Test Senaryosu
-Otomasyon kodu şu adımları otomatik olarak gerçekleştirir:
+python -m pytest tests/test_insider_qa.py --alluredir=allure-results
 
-https://insiderone.com/ adresine gider ve ana sayfanın açıldığını doğrular.
+5. Raporu Oluşturun ve Açın
 
-"Careers" menüsünden QA ilanları sayfasına ulaşır.
+allure generate allure-results --clean -o allure-report
+allure open allure-report
 
-Lokasyon: "Istanbul, Turkey" ve Departman: "Quality Assurance" filtrelerini uygular
-
-Listelenen ilanların pozisyon, departman ve lokasyon bilgilerinin doğruluğunu kontrol eder.
-
-"View Role" butonuna tıklar ve başvuru sayfasına (Lever/LinkedIn) yönlendirildiğini teyit eder.
-
-⚠️ Önemli Notlar & Teknik Kararlar
-Canlı web sitesindeki dinamik değişikliklere uyum sağlamak için kodda bazı esneklikler yapılmıştır:
-
-Lokasyon Filtresi: Web sitesinde ülke ismi bazen "Turkey", bazen "Turkiye" olarak geçtiği için; veya filtreleme sorunu yaşandığında sadece "Istanbul" yazdığı için test kodu "Istanbul", "Turkey" ve "Turkiye" varyasyonlarının hepsini kabul edecek şekilde tasarlanmıştır.
-
-İş İlanı Başlıkları: İlan başlıkları "Quality Assurance", "Quality Engineering" veya "QA" olarak değişebilmektedir. Testin yanlış pozitif vermemesi (flaky olmaması) için bu terimlerin hepsi geçerli kabul edilmiştir.
-
-Seçiciler (Selectors): Element ID'leri dinamik olarak değiştiği için (Select2 yapısı), daha kararlı olan XPath ve Text-Based seçim yöntemleri tercih edilmiştir. 
-
-Raporlama: Test sonuçları Allure ile görselleştirilebilir, hata durumunda ekran görüntüleri rapora eklenebilir.
