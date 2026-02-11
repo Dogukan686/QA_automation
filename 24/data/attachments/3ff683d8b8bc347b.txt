@@ -1,0 +1,24 @@
+🤖 CI Ortamı algılandı: Headless mod aktif.
+
+--- Test Başlıyor ---
+✅ Ana sayfa yüklendi.
+   -> 'See all QA jobs' butonuna tıklandı...
+   -> Sayfa geçişi başarılı.
+   -> Filtreleme adımı başlıyor...
+   -> Lokasyon menüsü açıldı.
+   -> Klavye ile 'Istanbul' yazılıp Enter'a basıldı.
+✅ Filtreleme yapıldı ve liste görünür.
+   -> İlanlar taranıyor...
+   -> 8 adet ilan tespit edildi.
+   ℹ️ İncelenen İlan: AI-Driven Quality Engineering: Insider One QA Bootcamp'26 | Istanbul, Turkiye
+   ℹ️ İncelenen İlan: Senior Software QA Engineer (Remote) | Istanbul
+   ℹ️ İncelenen İlan: Senior Software Quality Assurance Engineer (Remote) | Istanbul
+   ℹ️ İncelenen İlan: Software QA Engineer - Europe (Turkish Speaker) | Berlin, Germany
+   ✅ (İstisna): Bu ilan 'Turkish Speaker' olduğu için Berlin lokasyonu kabul edildi.
+   ℹ️ İncelenen İlan: Software QA Tester / Intercontinental Support – Insider One Testinium Tech Hub Cooperation (Fresh Grad/Junior)(Remote) | Turkey
+   ℹ️ İncelenen İlan: Software Quality Assurance Engineer (Remote) | Istanbul, Turkiye
+   ℹ️ İncelenen İlan: Software Quality Assurance Manager (Remote) | Istanbul, Turkiye
+   ℹ️ İncelenen İlan: Software Quality Assurance Team Lead (Remote) | Istanbul, Turkiye
+✅ İlanların içerik kontrolleri tamamlandı.
+   -> Yönlendirilen URL: https://jobs.lever.co/insiderone/5a858b45-6b01-4c6d-90fc-85aeafc84498
+✅ Başarıyla Lever başvuru formuna yönlendirildi.
