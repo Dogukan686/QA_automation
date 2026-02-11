@@ -28,12 +28,18 @@ QA_automation/
 ├── pages/                  # Sayfa Nesneleri (POM)
 │   ├── base_page.py        # Temel metodlar (wait, click, find)
 │   └── qa_page.py          # QA sayfasına özel elementler ve aksiyonlar
+
 ├── tests/                  # Test Senaryoları
 │   └── test_insider_qa.py  # Ana test akışı
+
 ├── allure-results/         # Test sonrası oluşan ham veriler (Git'e gönderilmez)
+
 ├── allure-report/          # Görselleştirilmiş HTML raporu
+
 ├── conftest.py             # Pytest fixture'ları ve Allure screenshot hook'u
+
 ├── requirements.txt        # Gerekli kütüphaneler listesi
+
 └── .gitignore              # Takip edilmeyecek dosyalar (venv, pycache vb.)
 
 🚀 Kurulum ve Çalıştırma
