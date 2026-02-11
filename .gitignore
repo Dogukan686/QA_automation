@@ -13,5 +13,6 @@ chromedriver.log
 .vscode/
 
 # Allure
-allure-results/     # Ham verileri gizliyoruz (Gereksiz kalabalık)
-# allure-report/    # Buranın başındaki # işaretini kaldırarak raporun yüklenmesini sağlıyoruz
+allure-results/     # Ham veriler GitHub'a gitmesin (Gereksiz kalabalık)
+
+# allure-report/    # Başına # koyduk (veya silebilirsin), böylece raporun GitHub'a YÜKLENMESİNİ sağlıyoruz.
