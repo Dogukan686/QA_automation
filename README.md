@@ -1,5 +1,8 @@
 Bu proje, Insider kariyer sayfasındaki Quality Assurance ilanlarını otomatik olarak filtreleyen, doğrulayan ve sonuçları profesyonel bir raporlama sistemiyle sunan bir Selenium Webdriver otomasyon projesidir.
 
+📊 Canlı Test Raporu
+Projenin her push işleminden sonra otomatik olarak koşan test sonuçlarına ve ekran görüntülerine aşağıdaki linkten ulaşabilirsiniz:https://Dogukan686.github.io/QA_automation/
+
 🛠 Kullanılan Teknolojiler
 Dil: Python 3.12+
 
