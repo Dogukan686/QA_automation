@@ -1,20 +1,20 @@
 import pytest
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 @pytest.fixture(scope="function")
 def driver():
     options = Options()
     
-    # --- CI/CD ve GitHub Actions için Kritik Ayarlar ---
-    options.add_argument("--headless") # Tarayıcıyı görünmez modda açar
-    options.add_argument("--no-sandbox") # Güvenlik duvarını Linux için esnetir
+    # --- GitHub Actions (Linux) İçin Kritik Parametreler ---
+    options.add_argument("--headless=new") # Tarayıcıyı görünmez yapar
+    options.add_argument("--no-sandbox")   # Güvenlik katmanını aşar (Linux için şart)
     options.add_argument("--disable-dev-shm-usage") # Bellek sorunlarını önler
     options.add_argument("--window-size=1920,1080") # Ekran boyutu tanımlar
     
-    # Driver başlatma
+    # WebDriver kurulumu
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
     
