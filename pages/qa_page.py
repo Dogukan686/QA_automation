@@ -22,22 +22,24 @@ class QAPage:
         btn.click()
 
     def filter_jobs(self):
-        """İstanbul lokasyonunu seçer ve Berlin sızıntısını önlemek için bekler."""
         wait = WebDriverWait(self.driver, 20)
         
-        # 1. Lokasyon menüsünü bekle ve tıkla
+        # 1. Lokasyon menüsünü bekle
         location_container = wait.until(EC.element_to_be_clickable(self.LOCATION_CONTAINER))
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", location_container)
+        
+        # Elementin üzerine kaydır (Scroll)
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", location_container)
         time.sleep(1)
+        
+        # JavaScript ile tıkla (Engelleri aşar)
         self.driver.execute_script("arguments[0].click();", location_container)
 
-        # 2. 'Istanbul, Turkiye' seçeneğini bul ve JavaScript ile tıkla
+        # 2. 'Istanbul, Turkiye' seçeneğini seç
         istanbul_option = wait.until(EC.presence_of_element_located(
             (By.XPATH, "//li[contains(text(), 'Istanbul, Turkiye')]")
         ))
         self.driver.execute_script("arguments[0].click();", istanbul_option)
         
-        # 3. İlanların yenilenmesi için 5 saniye bekle
         time.sleep(5)
 
     def verify_jobs_list(self):
@@ -50,10 +52,11 @@ class QAPage:
         return self.driver.find_elements(By.CLASS_NAME, "position-list-item")
 
     def click_view_role(self):
-        """İlk ilanın 'View Role' butonuna tıklar."""
         wait = WebDriverWait(self.driver, 15)
+        # Butonun DOM'da hazır olmasını bekle
         btn = wait.until(EC.presence_of_element_located(self.VIEW_ROLE_BTN))
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", btn)
+        
+        # Elementi ortala ve JavaScript ile tıkla
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
         time.sleep(1)
-        # Mouse hover simülasyonu gerekebilir, en garantisi JS click
         self.driver.execute_script("arguments[0].click();", btn)
