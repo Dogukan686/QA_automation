@@ -1,6 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"
-    Insider QA İş Akışı Otomasyon Testi
-    - Ana sayfa, QA sayfası ve filtreleme kontrollerini yapar.
-    - Berlin gibi filtre dışı ilanların sızmasını engeller.
-    ","51285","test_insider_qa_flow","tests","Wed Feb 11 09:21:23 UTC 2026","broken","Wed Feb 11 09:22:15 UTC 2026","","test_insider_qa","",""
