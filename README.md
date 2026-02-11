@@ -1,79 +1,98 @@
-Bu proje, Insider kariyer sayfasındaki Quality Assurance ilanlarını otomatik olarak filtreleyen, doğrulayan ve sonuçları profesyonel bir raporlama sistemiyle sunan bir Selenium Webdriver otomasyon projesidir.
+# 🚀 Insider QA Automation Challenge
 
-📊 Canlı Test Raporu
-Projenin her push işleminden sonra otomatik olarak koşan test sonuçlarına ve ekran görüntülerine aşağıdaki linkten ulaşabilirsiniz:https://Dogukan686.github.io/QA_automation/
+Bu proje, Insider kariyer sayfasının uçtan uca (E2E) test otomasyonunu içeren teknik bir çalışmadır. **Page Object Model (POM)** tasarım deseni kullanılarak, sürdürülebilir ve modüler bir yapıda geliştirilmiştir.
 
-🛠 Kullanılan Teknolojiler
-Dil: Python 3.12+
+![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
+![Selenium](https://img.shields.io/badge/Selenium-WebDriver-43B02A?style=for-the-badge&logo=selenium)
+![Pytest](https://img.shields.io/badge/Pytest-Framework-yellow?style=for-the-badge&logo=pytest)
 
-Test Framework: Pytest
+## 🎯 Proje Özellikleri ve Teknik Detaylar
 
-Web Otomasyon: Selenium WebDriver
+Bu otomasyon projesi, sadece "Happy Path" senaryolarını değil, gerçek dünya problemlerini (senkronizasyon, dinamik elementler) de yönetecek şekilde tasarlanmıştır.
 
-Raporlama: Allure Report
+* **Page Object Model (POM):** Sayfa elementleri ve test mantığı birbirinden ayrılarak kodun okunabilirliği ve bakımı kolaylaştırıldı.
+* **Akıllı Bekleme (Smart Waits):** `time.sleep` yerine `WebDriverWait` ve `ExpectedConditions` kullanılarak senkronizasyon sorunları minimize edildi.
+* **Hibrit Locator Stratejisi:** Dinamik olarak değişen elementler (örn: Select2 filtreleri) için ID, CSS ve XPath kombinasyonları kullanılarak "kırılganlık" önlendi.
+* **İş Mantığı İstisnaları (Business Logic Handling):** İstanbul filtresinde listelenen "Berlin - Turkish Speaker" gibi istisnai ilanlar, test hatası olarak değil, iş kuralı olarak ele alındı.
+* **Veri Doğrulama (Assertions):** İlanların Pozisyon, Departman ve Lokasyon ("Turkey" vs "Turkiye") bilgileri esnek doğrulama yöntemleriyle kontrol edildi.
 
-Tasarım Deseni: Page Object Model (POM)
+## 📂 Proje Yapısı
 
-Sürüm Kontrol: Git & GitHub
-
-✨ Öne Çıkan Özellikler
-POM Mimarisi: Kodun sürdürülebilirliği ve okunabilirliği için Page Object Model yapısı kullanılmıştır.
-
-Dinamik Filtreleme: Insider sitesindeki karmaşık Select2 dropdown yapıları, JavaScript Executor ve Explicit Wait kombinasyonu ile stabilize edilmiştir.
-
-Hata Anı Ekran Görüntüsü (Screenshot on Failure): Test fail ettiğinde, conftest.py içerisindeki hook sayesinde otomatik olarak o anın ekran görüntüsünü alıp Allure raporuna ekler.
-
-Esnek Locator Stratejisi: Lokasyon ve departman isimlerindeki karakter farklarını (Turkey/Turkiye) tolore eden esnek XPath'ler kullanılmıştır.
-
-📁 Proje Yapısı
-
+```text
 QA_automation/
+├── pages/                  # Sayfa sınıfları (POM)
+│   ├── base_page.py        # Ortak metodlar (Click, Scroll, Wait)
+│   ├── home_page.py        # Ana sayfa işlemleri
+│   └── careers_page.py     # QA Kariyer, Filtreleme ve İlan kontrolleri
+├── tests/                  # Test senaryoları
+│   └── test_insider_flow.py
+├── conftest.py             # Pytest driver konfigürasyonu (Fixture)
+├── requirements.txt        # Proje bağımlılıkları
+└── README.md               # Proje dokümantasyonu
 
-├── pages/                  # Sayfa Nesneleri (POM)
 
-│   ├── base_page.py        # Temel metodlar (wait, click, find)
+✅ Test Senaryosu (Workflow)
+Test test_insider_flow.py dosyası üzerinden şu adımları izler:
 
-│   └── qa_page.py          # QA sayfasına özel elementler ve aksiyonlar
+Ana Sayfa: Insider ana sayfasına gidilir ve navbar veya logo kontrolü ile sayfanın yüklendiği doğrulanır.
 
-├── tests/                  # Test Senaryoları
+Kariyer Sayfası: QA kariyer sayfasına gidilir, çerezler (varsa) kapatılır.
 
-│   └── test_insider_qa.py  # Ana test akışı
+İlanları Görüntüleme: "See all QA jobs" butonuna tıklanır.
 
-├── allure-results/         # Test sonrası oluşan ham veriler (Git'e gönderilmez)
+Fail-Safe: Eğer buton çalışmazsa, URL kontrolü yapılıp manuel yönlendirme devreye girer.
 
-├── allure-report/          # Görselleştirilmiş HTML raporu
+Filtreleme:
 
-├── conftest.py             # Pytest fixture'ları ve Allure screenshot hook'u
+Lokasyon filtresi dinamik olarak bulunur.
 
-├── requirements.txt        # Gerekli kütüphaneler listesi
+Listeden veya klavye simülasyonu ile "Istanbul" seçilir.
 
-└── .gitignore              # Takip edilmeyecek dosyalar (venv, pycache vb.)
+İlan Kontrolü:
 
-🚀 Kurulum ve Çalıştırma
+Listelenen ilanların yüklenmesi beklenir.
 
-1. Projeyi Klonlayın
+Her ilanın "Quality Assurance" veya "QA" içerdiği doğrulanır.
 
-git clone https://github.com/Dogukan686/QA_automation.git
+Her ilanın "Istanbul, Turkey" veya "Istanbul, Turkiye" lokasyonuna sahip olduğu doğrulanır.
 
+Başvuru Yönlendirmesi: "View Role" butonuna tıklanarak kullanıcının lever.co başvuru formuna yönlendirildiği doğrulanır.
+
+🛠️ Kurulum ve Çalıştırma
+Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin:
+
+1. Repoyu Klonlayın
+
+git clone [https://github.com/KULLANICI_ADINIZ/QA_automation.git](https://github.com/KULLANICI_ADINIZ/QA_automation.git)
 cd QA_automation
 
-2. Sanal Ortamı Kurun ve Aktif Edin
+2. Sanal Ortamı Kurun (Önerilen)
 
+# Windows için
 python -m venv venv
+venv\Scripts\activate
 
-venv\Scripts\activate  # Windows
-
+# Mac/Linux için
+python3 -m venv venv
+source venv/bin/activate
 3. Bağımlılıkları Yükleyin
 
 pip install -r requirements.txt
 
-4. Testleri Koşturun
+4. Testi Çalıştırın
 
-python -m pytest tests/test_insider_qa.py --alluredir=allure-results
+Test sonuçlarını ve logları konsolda görmek için -s parametresini kullanın:
 
-5. Raporu Oluşturun ve Açın
+python -m pytest tests/test_insider_flow.py -s
 
-allure generate allure-results --clean -o allure-report
+📊 Raporlama (Allure)
+Eğer Allure yüklü ise, detaylı HTML raporu oluşturabilirsiniz:
 
-allure open allure-report
+# Testi raporla çalıştır
+python -m pytest tests/test_insider_flow.py --alluredir=allure-results
 
+# Raporu görüntüle
+allure serve allure-results
+
+📊 Canlı Test Raporu
+Projenin her push işleminden sonra otomatik olarak koşan test sonuçlarına ve ekran görüntülerine aşağıdaki linkten ulaşabilirsiniz:https://Dogukan686.github.io/QA_automation/
