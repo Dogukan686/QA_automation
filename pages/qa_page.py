@@ -6,10 +6,9 @@ import time
 class QAPage:
     def __init__(self, driver):
         self.driver = driver
-        # Locator Tanımları
+        # Locator Tanımları (Daha esnek CSS seçiciler eklendi)
         self.SEE_ALL_JOBS_BTN = (By.LINK_TEXT, "See all QA jobs")
-        self.LOCATION_CONTAINER = (By.ID, "select2-filter-by-location-container")
-        self.FILTER_SECTION = (By.ID, "filter-utils") # Filtrelerin olduğu ana bölüm
+        self.LOCATION_CONTAINER = (By.CSS_SELECTOR, ".select2-selection--single") # Genel select2 kutusu
         self.JOBS_LIST = (By.ID, "jobs-list")
         self.POSITION_TITLE = (By.CLASS_NAME, "position-title")
         self.LOCATION_TEXT = (By.CLASS_NAME, "position-location")
@@ -19,9 +18,9 @@ class QAPage:
     def open_qa_jobs(self):
         """QA kariyer sayfasını açar ve ilanlar sayfasına geçişi bekler."""
         self.driver.get("https://useinsider.com/careers/quality-assurance/")
-        wait = WebDriverWait(self.driver, 20)
+        wait = WebDriverWait(self.driver, 25)
         
-        # 1. Çerez Banner'ını kapat
+        # 1. Çerez Banner'ını kapat (Zaman aşımını önlemek için)
         try:
             cookie_btn = wait.until(EC.element_to_be_clickable(self.COOKIE_ACCEPT_BTN))
             cookie_btn.click()
@@ -31,38 +30,40 @@ class QAPage:
         # 2. 'See all QA jobs' butonuna JS ile tıkla
         btn = wait.until(EC.presence_of_element_located(self.SEE_ALL_JOBS_BTN))
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
-        time.sleep(1)
+        time.sleep(2)
         self.driver.execute_script("arguments[0].click();", btn)
 
-        # 3. KRİTİK: İlanlar sayfasının yüklendiğini doğrula (URL kontrolü)
+        # 3. İlanlar sayfasına geçtiğimizden emin ol
         wait.until(EC.url_contains("open-positions"))
+        # Sayfanın JS bileşenlerinin (Select2) yüklenmesi için 3 saniye ek nefes payı
+        time.sleep(3)
 
     def filter_jobs(self):
-        """Filtre bölümünün hazır olmasını bekler ve İstanbul'u seçer."""
-        wait = WebDriverWait(self.driver, 30) # Süreyi biraz daha artırdık
+        """Filtrelerin hazır olmasını bekler ve İstanbul'u seçer."""
+        wait = WebDriverWait(self.driver, 40) # CI ortamı için süreyi artırdık
         
-        # 1. Filtreleme bölümünün (Dropdown'ların olduğu alan) görünür olmasını bekle
-        wait.until(EC.visibility_of_element_located(self.FILTER_SECTION))
+        # 1. Lokasyon dropdown kutusunu bekle
+        # filter-utils ID'si bazen geç gelir, doğrudan seçim kutusunu bekliyoruz
+        location_box = wait.until(EC.presence_of_all_elements_located(self.LOCATION_CONTAINER))[0]
         
-        # 2. Lokasyon menüsünü bekle ve tıkla
-        location_container = wait.until(EC.element_to_be_clickable(self.LOCATION_CONTAINER))
-        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", location_container)
-        time.sleep(2) # Select2 bileşeninin kendine gelmesi için kısa bir es
-        self.driver.execute_script("arguments[0].click();", location_container)
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", location_box)
+        time.sleep(2)
+        
+        # JavaScript ile tıkla (En garantisi)
+        self.driver.execute_script("arguments[0].click();", location_box)
 
-        # 3. 'Istanbul, Turkiye' seçeneğini bul ve tıkla
+        # 2. 'Istanbul, Turkiye' seçeneğini DOM'da bul ve tıkla
         istanbul_option = wait.until(EC.presence_of_element_located(
             (By.XPATH, "//li[contains(text(), 'Istanbul, Turkiye')]")
         ))
         self.driver.execute_script("arguments[0].click();", istanbul_option)
         
-        # 4. İlanların yenilenmesi için bekle
+        # 3. İlanların filtrelenmesi için bekle
         time.sleep(5)
 
     def verify_jobs_list(self):
-        wait = WebDriverWait(self.driver, 20)
+        wait = WebDriverWait(self.driver, 25)
         try:
-            # İlan listesinin görünür olmasını bekle
             return wait.until(EC.visibility_of_element_located(self.JOBS_LIST)).is_displayed()
         except:
             return False
@@ -74,5 +75,5 @@ class QAPage:
         wait = WebDriverWait(self.driver, 20)
         btn = wait.until(EC.presence_of_element_located(self.VIEW_ROLE_BTN))
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
-        time.sleep(1)
+        time.sleep(2)
         self.driver.execute_script("arguments[0].click();", btn)
