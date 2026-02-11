@@ -25,6 +25,7 @@ Esnek Locator Stratejisi: Lokasyon ve departman isimlerindeki karakter farkları
 📁 Proje Yapısı
 
 QA_automation/
+
 ├── pages/                  # Sayfa Nesneleri (POM)
 
 │   ├── base_page.py        # Temel metodlar (wait, click, find)
