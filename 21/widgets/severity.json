@@ -1,1 +1,0 @@
-[{"uid":"2d7777b73853560a","name":"test_insider_qa_process","time":{"start":1770808841459,"stop":1770808841459,"duration":0},"status":"broken","severity":"normal"},{"uid":"7c651ecffea70f8","name":"test_insider_qa_flow","time":{"start":1770795971260,"stop":1770796009138,"duration":37878},"status":"passed","severity":"normal"}]
