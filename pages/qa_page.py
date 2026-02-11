@@ -31,22 +31,36 @@ class QAPage(BasePage):
         self.driver.execute_script("arguments[0].click();", btn)
 
     def filter_jobs(self):
-        time.sleep(5) # Sayfa elementlerinin oturması için
-        self.driver.execute_script("window.scrollBy(0, 500);")
+        # 1. Adım: Sayfanın ve Select2 kütüphanesinin yüklenmesi için zaman tanı
+        time.sleep(5) 
+        
+        # 2. Adım: Filtrelerin olduğu alana kaydır (Header elementin üstünü kapatmasın)
+        self.driver.execute_script("window.scrollBy(0, 450);")
         time.sleep(2)
 
-        # --- LOKASYON SEÇİMİ ---
         try:
-            containers = self.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".select2-container")))
-            location_dropdown = containers[0]
-            self.driver.execute_script("arguments[0].click();", location_dropdown)
+            # 3. Adım: Lokasyon Dropdown'ını bul ve JS ile zorla tıkla
+            # Insider select2 kullandığı için container üzerinden gitmek en sağlıklısıdır
+            dropdowns = self.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".select2-selection--single")))
+            location_dropdown = dropdowns[0] 
             
-            # Seçeneğin tıklanabilir olmasını bekle
-            ist_opt = self.wait.until(EC.element_to_be_clickable(self.ISTANBUL_OPTION))
-            self.driver.execute_script("arguments[0].click();", ist_opt)
-            print(">>> İstanbul başarıyla seçildi.")
+            self.driver.execute_script("arguments[0].click();", location_dropdown)
+            print("Lokasyon dropdown tıklandı.")
+            
+            # 4. Adım: 'Istanbul, Turkiye' seçeneğini bekle ve JS ile tıkla
+            # Site 'Turkey' veya 'Turkiye' yazabiliyor, o yüzden esnek bir XPath kullanıyoruz
+            ist_xpath = "//li[contains(text(), 'Istanbul') and contains(text(), 'Turkiy')]"
+            ist_option = self.wait.until(EC.element_to_be_clickable((By.XPATH, ist_xpath)))
+            
+            self.driver.execute_script("arguments[0].click();", ist_option)
+            print(">>> Lokasyon: Istanbul, Turkiye başarıyla seçildi.")
+
+            # Listenin güncellenmesi için bekle
+            time.sleep(3)
+            
         except Exception as e:
             print(f"!!! Lokasyon seçimi başarısız: {str(e)}")
+            # Hata oluşursa conftest.py üzerinden ekran görüntüsü rapora eklenecek
 
         # --- DEPARTMAN SEÇİMİ ---
         time.sleep(2)
