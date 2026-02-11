@@ -8,8 +8,8 @@ class QAPage:
     def __init__(self, driver):
         self.driver = driver
         self.SEE_ALL_JOBS_BTN = (By.LINK_TEXT, "See all QA jobs")
-        # Locator'ı daha geniş kapsamlı bir CSS seçicisine çevirdik
-        self.LOCATION_CONTAINER = (By.CSS_SELECTOR, "span[aria-labelledby*='select2-filter-by-location']")
+        # --- EN SAĞLAM LOCATOR: Etiket metni üzerinden bulma ---
+        self.LOCATION_DROPDOWN = (By.XPATH, "//label[contains(text(), 'Filter by Location')]/following-sibling::span")
         self.JOBS_LIST = (By.ID, "jobs-list")
         self.POSITION_TITLE = (By.CLASS_NAME, "position-title")
         self.LOCATION_TEXT = (By.CLASS_NAME, "position-location")
@@ -30,30 +30,30 @@ class QAPage:
         time.sleep(2)
         self.driver.execute_script("arguments[0].click();", btn)
         
-        # Sayfanın yüklendiğini doğrula
+        # Sayfanın değiştiğinden emin ol
         wait.until(EC.url_contains("open-positions"))
-        time.sleep(5) # Sayfanın JS bileşenleri için nefes payı
+        time.sleep(5) 
 
     def filter_jobs(self):
-        """İstanbul'u seçer. GitHub Actions'ın yavaşlığına karşı dirençli yapı."""
-        wait = WebDriverWait(self.driver, 45) # Süreyi biraz daha artırdık
+        """İstanbul'u seçer. Etiket referanslı ve retry mekanizmalı."""
+        wait = WebDriverWait(self.driver, 50) # Süreyi daha da artırdık
         
-        # 1. Filtrelerin olduğu bölüme kadar sayfayı kaydır (Lazy load'u tetikle)
-        self.driver.execute_script("window.scrollTo(0, 600);")
-        time.sleep(3)
+        # 1. Sayfanın en altına kadar kaydırıp geri çık (Lazy-load tetikleyici)
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)
+        self.driver.execute_script("window.scrollTo(0, 0);")
+        time.sleep(2)
 
         # 2. Lokasyon dropdown'ının varlığını bekle
         try:
-            loc_container = wait.until(EC.presence_of_element_located(self.LOCATION_CONTAINER))
+            loc_container = wait.until(EC.presence_of_element_located(self.LOCATION_DROPDOWN))
             self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", loc_container)
-            time.sleep(2)
+            time.sleep(3)
         except TimeoutException:
-            print("❌ HATA: Lokasyon filtresi bulunamadı. Sayfa tam yüklenmemiş olabilir.")
-            # Hata anındaki URL'yi yazdır (Debug için)
-            print(f"Mevcut URL: {self.driver.current_url}")
+            print(f"❌ HATA: Lokasyon filtresi bulunamadı. URL: {self.driver.current_url}")
             raise
 
-        # 3. İstanbul'u seçmek için denemeler yap
+        # 3. İstanbul'u seçmek için denemeler
         istanbul_xpath = "//li[contains(@class, 'select2-results__option') and contains(text(), 'Istanbul')]"
         
         for i in range(3):
@@ -68,27 +68,27 @@ class QAPage:
                 )
                 self.driver.execute_script("arguments[0].click();", istanbul_option)
                 print(f"✅ Başarılı: Istanbul seçildi (Deneme {i+1})")
-                break
+                return # Başarılıysa çık
             except TimeoutException:
-                print(f"⚠️ Deneme {i+1}: Istanbul seçeneği henüz belirmedi, tekrar deneniyor...")
-                if i == 2: raise
+                print(f"⚠️ Deneme {i+1}: Menü açılmadı, tekrar deneniyor...")
         
-        time.sleep(6)
+        raise TimeoutException("3 denemede de Istanbul seçilemedi.")
 
     def verify_jobs_list(self):
         wait = WebDriverWait(self.driver, 30)
         try:
+            # Liste bazen 'is-loading' class'ına sahip olur, onun bitmesini beklemek gerekebilir
+            # Şimdilik varlığını kontrol ediyoruz
             return wait.until(EC.presence_of_element_located(self.JOBS_LIST)).is_displayed()
         except: return False
 
     def get_all_jobs_data(self):
-        # Liste güncellenirken sayfa atlamasını önlemek için hafif scroll
-        self.driver.execute_script("window.scrollBy(0, 300);")
-        time.sleep(2)
+        self.driver.execute_script("window.scrollBy(0, 400);")
+        time.sleep(3)
         return self.driver.find_elements(By.CLASS_NAME, "position-list-item")
 
     def click_view_role(self):
-        wait = WebDriverWait(self.driver, 25)
+        wait = WebDriverWait(self.driver, 30)
         btn = wait.until(EC.presence_of_element_located(self.VIEW_ROLE_BTN))
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
         time.sleep(2)
